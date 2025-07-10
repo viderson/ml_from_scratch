@@ -1,5 +1,6 @@
 import numpy as np
 from mlfs.naive_bayes import NaiveBayes  
+import pytest
 
 def test_basic_binary_classification():
     """
