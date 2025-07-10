@@ -20,12 +20,12 @@ class SVM:
         self.iterations = iterations
         self.lambdaa = lambdaa
         self.lr = lr
-        self.w = None
-        self.b = None
+        self.w = None  
+        self.b = None  
 
     def initialize_parameters(self, X):
         """
-        Initialize weights and bias.
+        Initialize weights and bias with zeros.
 
         Parameters:
         -----------
@@ -49,23 +49,6 @@ class SVM:
         """
         self.w -= self.lr * dw
         self.b -= self.lr * db
-
-    def compute_margin(self, X, y):
-        """
-        Compute margin values for samples.
-
-        Parameters:
-        -----------
-        X : numpy array
-            Input features.
-        y : numpy array
-            True labels.
-
-        Returns:
-        --------
-        numpy array of margins.
-        """
-        return y * (np.dot(X, self.w) - self.b) >= 1
 
     def stochastic_gradient_descent(self, X, y):
         """
@@ -100,8 +83,9 @@ class SVM:
         y : numpy array
             Training labels.
         """
-        if X.shape[0] != y.shape[0]:
-            raise ValueError("Number of samples in X and y must match.")
+        if len(X) != len(y):
+            raise ValueError("Mismatched input dimensions between X and y.")
+
         self.initialize_parameters(X)
         for _ in range(self.iterations):
             self.stochastic_gradient_descent(X, y)
@@ -118,8 +102,7 @@ class SVM:
         Returns:
         --------
         numpy array
-            Predicted labels.
+            Predicted labels (0 or 1).
         """
         scores = np.dot(X, self.w) - self.b
-        raw_preds = np.sign(scores)
-        return np.where(raw_preds <= -1, 0, 1)
+        return np.where(scores >= 0, 1, 0)
