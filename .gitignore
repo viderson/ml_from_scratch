@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Mac system files
+.DS_Store
+
+# VSCode settings
+.vscode/
+
+# PyCharm
+.idea/
+
+# Test/coverage/cache
+*.log
+*.coverage
+.cache/
+pytest_cache/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Pickle and model files
+*.pkl
+*.joblib
+
+# Data
+data/*.csv
+data/*.xlsx
