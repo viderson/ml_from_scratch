@@ -15,6 +15,8 @@ class KMeans:
         X : numpy.ndarray
             Dataset to cluster.
         """
+        if self.n_clusters > X.shape[0]:
+            raise ValueError(f"Number of clusters ({self.n_clusters}) cannot be greater than number of samples ({X.shape[0]})")
         np.random.seed(42)  # For reproducibility
         indices = np.random.permutation(X.shape[0])
         selected = indices[:self.n_clusters]
