@@ -100,6 +100,8 @@ class SVM:
         y : numpy array
             Training labels.
         """
+        if X.shape[0] != y.shape[0]:
+            raise ValueError("Number of samples in X and y must match.")
         self.initialize_parameters(X)
         for _ in range(self.iterations):
             self.stochastic_gradient_descent(X, y)
