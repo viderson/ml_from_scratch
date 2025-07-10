@@ -17,6 +17,8 @@ class NaiveBayes:
         """
         eps = 1e-9
         classes, counts = np.unique(y, return_counts=True)
+        if len(counts) < 2:
+            raise ValueError("NaiveBayes requires at least two classes in the target variable.")
         
         # Class prior probabilities
         self.prior_0 = counts[0] / np.sum(counts)
