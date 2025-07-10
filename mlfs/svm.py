@@ -63,16 +63,23 @@ class SVM:
         """
         # Convert labels {0,1} to {-1,1}
         y_mod = np.where(y <= 0, -1, 1)
-        for xi, target in zip(X, y_mod):
-            margin = target * (np.dot(xi, self.w) - self.b)
+
+        # Shuffle indices to avoid biased ordering
+        indices = np.random.permutation(len(y_mod))
+        for i in indices:
+            xi, target = X[i], y_mod[i]
+            # Compute margin with conventional bias sign
+            margin = target * (np.dot(xi, self.w) + self.b)
+
             if margin >= 1:
-                # Only regularization term
+                # Only regularization term gradient
                 dw = 2 * self.lambdaa * self.w
                 db = 0.0
             else:
                 # Regularization + hinge loss gradient
                 dw = 2 * self.lambdaa * self.w - target * xi
                 db = -target
+
             self.update_parameters(dw, db)
 
     def fit(self, X, y):
@@ -111,5 +118,5 @@ class SVM:
         numpy.ndarray
             Predicted labels {0,1} of shape (n_samples,).
         """
-        scores = np.dot(X, self.w) - self.b
+        scores = np.dot(X, self.w) + self.b
         return np.where(scores >= 0, 1, 0)
