@@ -8,7 +8,7 @@ def test_predict_linearly_separable_data():
     """
     X = np.array([[2, 3], [1, 1], [2, 0], [0, 0]])
     y = np.array([1, 1, 0, 0])
-    model = SVM(iterations=1000, lr=0.01, lambdaa=0.01)
+    model = SVM(iterations=3000, lr=0.1, lambdaa=0.001)
     model.fit(X, y)
     predictions = model.predict(X)
     assert np.array_equal(predictions, y), f"Expected {y}, got {predictions}"
