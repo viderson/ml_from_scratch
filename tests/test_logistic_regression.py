@@ -16,7 +16,7 @@ def test_fit_predict_perfect_separation():
     y = np.array([0, 0, 0, 1, 1, 1])
     model = LogisticRegression(learning_rate = 0.1)
     model.fit(X,y, iterations = 10000, plot_cost = False)
-    predictions = model.predict(X)
+    pred = model.predict(X)
 
     assert np.array_equal(pred,y), f"Expected {y}, got {pred}"
 def test_predict_new_data():
