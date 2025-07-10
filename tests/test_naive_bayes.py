@@ -54,10 +54,12 @@ def test_predict_on_unseen_data():
 
 def test_variance_never_zero():
     """
-    Ensures that variance used in Gaussian density is never exactly zero (numerical stability).
+    Ensures that the model raises ValueError when only one class is present in the training data.
+    This guards against invalid statistical assumptions and enforces correct usage.
     """
     X = np.array([[1, 1], [1, 1]])
-    y = np.array([0, 0])
+    y = np.array([0, 0])  # Only one class present
     model = NaiveBayes()
-    model.fit(X, y)
-    assert np.all(model.var_0 > 0), "Variance should be adjusted to avoid zero"
+    with pytest.raises(ValueError, match="requires at least two classes"):
+        model.fit(X, y)
+
