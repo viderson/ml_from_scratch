@@ -75,7 +75,7 @@ class SVM:
                 db = -y_transformed[i]
             self.update_parameters(dw, db)
 
-    def fit(self, X, y):(self, X, y):
+    def fit(self, X, y):
         """
         Train the SVM model.
 
@@ -85,8 +85,13 @@ class SVM:
             Training feature matrix.
         y : numpy array
             Training labels.
+
+        Raises:
+        ------
+        ValueError:
+            If X and y have mismatched lengths.
         """
-        if len(X) != len(y):
+        if X.shape[0] != y.shape[0]:
             raise ValueError("Mismatched input dimensions between X and y.")
 
         self.initialize_parameters(X)
