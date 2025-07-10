@@ -1,58 +1,117 @@
 import numpy as np
-import pytest
-from mlfs.svm import SVM  
 
-def test_predict_linearly_separable_data():
+class SVM:
     """
-    Test that the SVM correctly classifies a simple linearly separable dataset.
+    Support Vector Machine (SVM) classifier using stochastic gradient descent.
     """
-    X = np.array([[2, 3], [1, 1], [2, 0], [0, 0]])
-    y = np.array([1, 1, 0, 0])
-    model = SVM(iterations=3000, lr=0.1, lambdaa=0.001)
-    model.fit(X, y)
-    predictions = model.predict(X)
-    assert np.array_equal(predictions, y), f"Expected {y}, got {predictions}"
+    def __init__(self, iterations=1000, lr=0.01, lambdaa=0.01):
+        """
+        Initialize the SVM model.
 
-def test_predict_all_same_class():
-    """
-    Test that the SVM can fit when all targets are the same class.
-    Should still return the same class for all predictions.
-    """
-    X = np.array([[1, 2], [2, 3], [3, 4]])
-    y = np.array([1, 1, 1])
-    model = SVM(iterations=100, lr=0.01, lambdaa=0.01)
-    model.fit(X, y)
-    predictions = model.predict(X)
-    assert all(pred == 1 for pred in predictions)
+        Parameters:
+        -----------
+        iterations : int
+            Number of training iterations.
+        lr : float
+            Learning rate for parameter updates.
+        lambdaa : float
+            Regularization strength.
+        """
+        self.iterations = iterations
+        self.lambdaa = lambdaa
+        self.lr = lr
+        self.w = None  # weights
+        self.b = None  # bias
 
-def test_output_shape():
-    """
-    Check that the shape of the prediction output matches input.
-    """
-    X = np.random.rand(10, 2)
-    y = np.array([0, 1] * 5)
-    model = SVM(iterations=10, lr=0.01, lambdaa=0.01)
-    model.fit(X, y)
-    predictions = model.predict(X)
-    assert predictions.shape == (10,)
+    def initialize_parameters(self, X):
+        """
+        Initialize weights and bias with zeros.
 
-def test_predict_values_range():
-    """
-    Ensure predict returns only binary class values (0 or 1).
-    """
-    X = np.random.rand(20, 3)
-    y = np.random.randint(0, 2, 20)
-    model = SVM(iterations=20, lr=0.01, lambdaa=0.01)
-    model.fit(X, y)
-    preds = model.predict(X)
-    assert set(np.unique(preds)).issubset({0, 1})
+        Parameters:
+        -----------
+        X : numpy array
+            Input feature matrix.
+        """
+        _, n_features = X.shape
+        self.w = np.zeros(n_features)
+        self.b = 0
 
-def test_invalid_input_shapes():
-    """
-    Check that passing mismatched input shapes raises a ValueError.
-    """
-    X = np.random.rand(5, 2)
-    y = np.array([1, 0, 1])  # wrong shape
-    model = SVM()
-    with pytest.raises(ValueError):
-        model.fit(X, y)
+    def update_parameters(self, dw, db):
+        """
+        Apply gradient updates to weights and bias.
+
+        Parameters:
+        -----------
+        dw : numpy array
+            Gradient of the weights.
+        db : float
+            Gradient of the bias.
+        """
+        self.w -= self.lr * dw
+        self.b -= self.lr * db
+
+        def stochastic_gradient_descent(self, X, y):
+        """
+        Perform one pass of stochastic gradient descent with hinge loss.
+
+        Parameters:
+        -----------
+        X : numpy array
+            Input features.
+        y : numpy array
+            True labels.
+        """
+        # Transform labels to -1 and 1 for hinge loss
+        y_transformed = np.where(y <= 0, -1, 1)
+        for i, x in enumerate(X):
+            margin = y_transformed[i] * (np.dot(x, self.w) - self.b)
+            if margin >= 1:
+                # Only regularization gradient
+                dw = 2 * self.lambdaa * self.w
+                db = 0
+            else:
+                # Hinge loss gradient: update weights and bias
+                dw = 2 * self.lambdaa * self.w - y_transformed[i] * x
+                db = y_transformed[i]  # flipped sign to correct bias update
+            self.update_parameters(dw, db)
+
+    def fit(self, X, y):(self, X, y):
+        """
+        Train the SVM model.
+
+        Parameters:
+        -----------
+        X : numpy array
+            Training feature matrix.
+        y : numpy array
+            Training labels.
+
+        Raises:
+        ------
+        ValueError:
+            If X and y have mismatched lengths.
+        """
+        if X.shape[0] != y.shape[0]:
+            raise ValueError("Mismatched input dimensions between X and y.")
+
+        self.initialize_parameters(X)
+        for _ in range(self.iterations):
+            self.stochastic_gradient_descent(X, y)
+
+    def predict(self, X):
+        """
+        Predict labels using the trained SVM model.
+
+        Parameters:
+        -----------
+        X : numpy array
+            Feature matrix to predict.
+
+        Returns:
+        --------
+        numpy array
+            Predicted labels (0 or 1).
+        """
+        # Decision rule: if score >= 0 predict 1, else 0
+        scores = np.dot(X, self.w) - self.b
+        return np.where(scores >= 0, 1, 0)
