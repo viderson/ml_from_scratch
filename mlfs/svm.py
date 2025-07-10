@@ -20,8 +20,8 @@ class SVM:
         self.iterations = iterations
         self.lambdaa = lambdaa
         self.lr = lr
-        self.w = None  
-        self.b = None  
+        self.w = None  # weights
+        self.b = None  # bias
 
     def initialize_parameters(self, X):
         """
@@ -52,7 +52,7 @@ class SVM:
 
     def stochastic_gradient_descent(self, X, y):
         """
-        Perform one pass of stochastic gradient descent.
+        Perform one pass of stochastic gradient descent with hinge loss.
 
         Parameters:
         -----------
@@ -61,18 +61,21 @@ class SVM:
         y : numpy array
             True labels.
         """
+        # Transform labels to -1 and 1 for hinge loss
         y_transformed = np.where(y <= 0, -1, 1)
         for i, x in enumerate(X):
-            condition = y_transformed[i] * (np.dot(x, self.w) - self.b) >= 1
-            if condition:
+            margin = y_transformed[i] * (np.dot(x, self.w) - self.b)
+            if margin >= 1:
+                # Only regularization gradient
                 dw = 2 * self.lambdaa * self.w
                 db = 0
             else:
-                dw = 2 * self.lambdaa * self.w - x * y_transformed[i]
+                # Hinge loss gradient
+                dw = 2 * self.lambdaa * self.w - y_transformed[i] * x
                 db = -y_transformed[i]
             self.update_parameters(dw, db)
 
-    def fit(self, X, y):
+    def fit(self, X, y):(self, X, y):
         """
         Train the SVM model.
 
@@ -104,5 +107,6 @@ class SVM:
         numpy array
             Predicted labels (0 or 1).
         """
+        # Decision rule: if score >= 0 predict 1, else 0
         scores = np.dot(X, self.w) - self.b
         return np.where(scores >= 0, 1, 0)
