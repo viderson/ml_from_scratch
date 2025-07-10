@@ -20,8 +20,8 @@ class SVM:
         self.iterations = iterations
         self.lr = lr
         self.lambdaa = lambdaa
-        self.w = None  # weights vector
-        self.b = None  # bias term
+        self.w = None  
+        self.b = None  
 
     def initialize_parameters(self, X):
         """
@@ -61,25 +61,17 @@ class SVM:
         y : numpy.ndarray
             Label vector (0 or 1).
         """
-        # Convert labels {0,1} to {-1,1}
         y_mod = np.where(y <= 0, -1, 1)
-
-        # Shuffle indices to avoid biased ordering
         indices = np.random.permutation(len(y_mod))
         for i in indices:
             xi, target = X[i], y_mod[i]
-            # Compute margin with conventional bias sign
             margin = target * (np.dot(xi, self.w) + self.b)
-
             if margin >= 1:
-                # Only regularization term gradient
                 dw = 2 * self.lambdaa * self.w
                 db = 0.0
             else:
-                # Regularization + hinge loss gradient
                 dw = 2 * self.lambdaa * self.w - target * xi
                 db = -target
-
             self.update_parameters(dw, db)
 
     def fit(self, X, y):
