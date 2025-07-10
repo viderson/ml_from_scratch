@@ -2,14 +2,14 @@ import numpy as np
 
 class SVM:
     """
-    Support Vector Machine (SVM) classifier using stochastic gradient descent.
+    Support Vector Machine (SVM) classifier using stochastic gradient descent and hinge loss.
     """
     def __init__(self, iterations=1000, lr=0.01, lambdaa=0.01):
         """
         Initialize the SVM model.
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         iterations : int
             Number of training iterations.
         lr : float
@@ -18,100 +18,98 @@ class SVM:
             Regularization strength.
         """
         self.iterations = iterations
-        self.lambdaa = lambdaa
         self.lr = lr
-        self.w = None  # weights
-        self.b = None  # bias
+        self.lambdaa = lambdaa
+        self.w = None  # weights vector
+        self.b = None  # bias term
 
     def initialize_parameters(self, X):
         """
-        Initialize weights and bias with zeros.
+        Initialize weights and bias to zeros.
 
-        Parameters:
-        -----------
-        X : numpy array
-            Input feature matrix.
+        Parameters
+        ----------
+        X : numpy.ndarray
+            Feature matrix of shape (n_samples, n_features).
         """
         _, n_features = X.shape
         self.w = np.zeros(n_features)
-        self.b = 0
+        self.b = 0.0
 
     def update_parameters(self, dw, db):
         """
-        Apply gradient updates to weights and bias.
+        Update weights and bias using gradients.
 
-        Parameters:
-        -----------
-        dw : numpy array
-            Gradient of the weights.
+        Parameters
+        ----------
+        dw : numpy.ndarray
+            Gradient w.r.t. weights.
         db : float
-            Gradient of the bias.
+            Gradient w.r.t. bias.
         """
         self.w -= self.lr * dw
         self.b -= self.lr * db
 
     def stochastic_gradient_descent(self, X, y):
         """
-        Perform one pass of stochastic gradient descent with hinge loss.
+        Perform one epoch of stochastic gradient descent using hinge loss.
 
-        Parameters:
-        -----------
-        X : numpy array
-            Input features.
-        y : numpy array
-            True labels.
+        Parameters
+        ----------
+        X : numpy.ndarray
+            Feature matrix.
+        y : numpy.ndarray
+            Label vector (0 or 1).
         """
-        # Transform labels to -1 and 1 for hinge loss
-        y_transformed = np.where(y <= 0, -1, 1)
-        for i, x in enumerate(X):
-            margin = y_transformed[i] * (np.dot(x, self.w) - self.b)
+        # Convert labels {0,1} to {-1,1}
+        y_mod = np.where(y <= 0, -1, 1)
+        for xi, target in zip(X, y_mod):
+            margin = target * (np.dot(xi, self.w) - self.b)
             if margin >= 1:
-                # Only regularization gradient
+                # Only regularization term
                 dw = 2 * self.lambdaa * self.w
-                db = 0
+                db = 0.0
             else:
-                # Hinge loss gradient
-                dw = 2 * self.lambdaa * self.w - y_transformed[i] * x
-                db = -y_transformed[i]
+                # Regularization + hinge loss gradient
+                dw = 2 * self.lambdaa * self.w - target * xi
+                db = -target
             self.update_parameters(dw, db)
 
     def fit(self, X, y):
         """
         Train the SVM model.
 
-        Parameters:
-        -----------
-        X : numpy array
-            Training feature matrix.
-        y : numpy array
-            Training labels.
+        Parameters
+        ----------
+        X : numpy.ndarray
+            Training feature matrix of shape (n_samples, n_features).
+        y : numpy.ndarray
+            Training labels vector of shape (n_samples,) with values {0,1}.
 
-        Raises:
+        Raises
         ------
-        ValueError:
-            If X and y have mismatched lengths.
+        ValueError
+            If the number of samples in X and y do not match.
         """
         if X.shape[0] != y.shape[0]:
-            raise ValueError("Mismatched input dimensions between X and y.")
-
+            raise ValueError("Number of samples in X and y must be equal.")
         self.initialize_parameters(X)
         for _ in range(self.iterations):
             self.stochastic_gradient_descent(X, y)
 
     def predict(self, X):
         """
-        Predict labels using the trained SVM model.
+        Predict class labels for samples in X.
 
-        Parameters:
-        -----------
-        X : numpy array
-            Feature matrix to predict.
+        Parameters
+        ----------
+        X : numpy.ndarray
+            Input feature matrix of shape (n_samples, n_features).
 
-        Returns:
-        --------
-        numpy array
-            Predicted labels (0 or 1).
+        Returns
+        -------
+        numpy.ndarray
+            Predicted labels {0,1} of shape (n_samples,).
         """
-        # Decision rule: if score >= 0 predict 1, else 0
         scores = np.dot(X, self.w) - self.b
         return np.where(scores >= 0, 1, 0)
