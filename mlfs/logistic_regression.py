@@ -140,3 +140,33 @@ class LogisticRegression:
             numpy.ndarray: Predicted labels (0 or 1).
         """
         return (self.forward(X) >= 0.5).astype(int)
+
+    def save_model(self, path):
+            """
+            Saves the model parameters to a file.
+
+            Parameters:
+                path (str): File path to save the model.
+            """
+            model_data = {
+                'W': self.W,
+                'b': self.b,
+                'learning_rate': self.learning_rate
+            }
+            with open(path, 'wb') as f:
+                pickle.dump(model_data, f)
+            print(f"✅ Model saved to {path}")
+
+    def load_model(self, path):
+        """
+        Loads the model parameters from a file.
+
+        Parameters:
+            path (str): File path to load the model.
+        """
+        with open(path, 'rb') as f:
+            model_data = pickle.load(f)
+        self.W = model_data['W']
+        self.b = model_data['b']
+        self.learning_rate = model_data['learning_rate']
+        print(f"✅ Model loaded from {path}")
