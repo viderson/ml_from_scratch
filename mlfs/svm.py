@@ -1,4 +1,6 @@
 import numpy as np
+import pickle
+
 
 class SVM:
     """
@@ -112,3 +114,40 @@ class SVM:
         """
         scores = np.dot(X, self.w) + self.b
         return np.where(scores >= 0, 1, 0)
+    def save_model(self, path):
+        """
+        Saves the trained SVM model to a file.
+
+        Parameters
+        ----------
+        path : str
+            Path to the file where the model will be saved.
+        """
+        model_data = {
+            'w': self.w,
+            'b': self.b,
+            'lr': self.lr,
+            'lambdaa': self.lambdaa,
+            'iterations': self.iterations
+        }
+        with open(path, 'wb') as f:
+            pickle.dump(model_data, f)
+        print(f"✅ Model saved to {path}")
+
+    def load_model(self, path):
+        """
+        Loads the SVM model from a file.
+
+        Parameters
+        ----------
+        path : str
+            Path to the file containing the saved model.
+        """
+        with open(path, 'rb') as f:
+            model_data = pickle.load(f)
+        self.w = model_data['w']
+        self.b = model_data['b']
+        self.lr = model_data['lr']
+        self.lambdaa = model_data['lambdaa']
+        self.iterations = model_data['iterations']
+        print(f"✅ Model loaded from {path}")
