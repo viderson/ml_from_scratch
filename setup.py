@@ -10,7 +10,7 @@ setup(
         "numpy",
         "pandas",
         "scikit-learn",
-        "plotly"
+        "plotly",
         "matplotlib"
     ],
     python_requires=">=3.8",
