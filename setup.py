@@ -11,7 +11,8 @@ setup(
         "pandas",
         "scikit-learn",
         "plotly",
-        "matplotlib"
+        "matplotlib",
+        "memory_profiler"
     ],
     python_requires=">=3.8",
 )
