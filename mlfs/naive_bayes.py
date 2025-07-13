@@ -1,4 +1,5 @@
 import numpy as np
+import pickle
 
 class NaiveBayes:
     """
@@ -83,3 +84,38 @@ class NaiveBayes:
         - numpy array: Predicted class labels of shape (n_samples,).
         """
         return np.array([self.log_score(record) for record in X])
+    def save_model(self, path):
+        """
+        Save the trained NaiveBayes model to a file.
+
+        Parameters:
+        - path (str): Path to the file where the model will be saved.
+        """
+        model_data = {
+            'mean_0': self.mean_0,
+            'mean_1': self.mean_1,
+            'var_0': self.var_0,
+            'var_1': self.var_1,
+            'prior_0': self.prior_0,
+            'prior_1': self.prior_1
+        }
+        with open(path, 'wb') as f:
+            pickle.dump(model_data, f)
+        print(f"✅ Model saved to {path}")
+
+    def load_model(self, path):
+        """
+        Load a NaiveBayes model from a file.
+
+        Parameters:
+        - path (str): Path to the file containing the saved model.
+        """
+        with open(path, 'rb') as f:
+            model_data = pickle.load(f)
+        self.mean_0 = model_data['mean_0']
+        self.mean_1 = model_data['mean_1']
+        self.var_0 = model_data['var_0']
+        self.var_1 = model_data['var_1']
+        self.prior_0 = model_data['prior_0']
+        self.prior_1 = model_data['prior_1']
+        print(f"✅ Model loaded from {path}")

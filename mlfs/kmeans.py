@@ -1,4 +1,6 @@
 import numpy as np
+import pickle
+
 
 class KMeans:
     def __init__(self, n_clusters, iterations=10):
@@ -150,3 +152,39 @@ class KMeans:
             Cluster assignments for the new data points.
         """
         return self.assign_clusters(X)
+        
+    def save_model(self, path):
+        """
+        Saves the trained KMeans model to a file.
+
+        Parameters:
+        -----------
+        path : str
+            File path to save the model.
+        """
+        model_data = {
+            'n_clusters': self.n_clusters,
+            'iterations': self.iterations,
+            'centroids': self.centroids,
+            'inertia_': self.inertia_
+        }
+        with open(path, 'wb') as f:
+            pickle.dump(model_data, f)
+        print(f"✅ Model saved to {path}")
+
+    def load_model(self, path):
+        """
+        Loads the KMeans model from a file.
+
+        Parameters:
+        -----------
+        path : str
+            File path to load the model.
+        """
+        with open(path, 'rb') as f:
+            model_data = pickle.load(f)
+        self.n_clusters = model_data['n_clusters']
+        self.iterations = model_data['iterations']
+        self.centroids = model_data['centroids']
+        self.inertia_ = model_data['inertia_']
+        print(f"✅ Model loaded from {path}")

@@ -1,5 +1,6 @@
 import numpy as np
 import plotly.express as px
+import pickle
 
 class LogisticRegression:
     """

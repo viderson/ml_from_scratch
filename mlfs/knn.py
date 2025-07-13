@@ -1,4 +1,6 @@
 import numpy as np
+import pickle
+
 class KNN:
     def __init__(self, n_neighbors=5):
         self.n_neighbors = n_neighbors
@@ -84,3 +86,37 @@ class KNN:
             predictions.append(predict_label)
         predictions = np.array(predictions)
         return predictions
+
+    def save_model(self, path):
+        """
+        Saves the model parameters to a file.
+
+        Parameters:
+        -----------
+        path : str
+            The file path to save the model.
+        """
+        model_data = {
+            'X_train': self.X_train,
+            'y_train': self.y_train,
+            'n_neighbors': self.n_neighbors
+        }
+        with open(path, 'wb') as f:
+            pickle.dump(model_data, f)
+        print(f"✅ Model saved to {path}")
+
+    def load_model(self, path):
+        """
+        Loads the model parameters from a file.
+
+        Parameters:
+        -----------
+        path : str
+            The file path to load the model.
+        """
+        with open(path, 'rb') as f:
+            model_data = pickle.load(f)
+        self.X_train = model_data['X_train']
+        self.y_train = model_data['y_train']
+        self.n_neighbors = model_data['n_neighbors']
+        print(f"✅ Model loaded from {path}")

@@ -1,4 +1,6 @@
 import numpy as np
+import pickle
+
 
 class Node:
     """
@@ -248,3 +250,36 @@ class DecisionTree:
             return self._traverse_tree(x, node.left)
         else:
             return self._traverse_tree(x, node.right)
+    def save_model(self, path):
+        """
+        Saves the decision tree model to a file.
+
+        Parameters
+        ----------
+        path : str
+            File path to save the model.
+        """
+        model_data = {
+            'root': self.root,
+            'min_samples': self.min_samples,
+            'max_depth': self.max_depth
+        }
+        with open(path, 'wb') as f:
+            pickle.dump(model_data, f)
+        print(f"✅ Model saved to {path}")
+
+    def load_model(self, path):
+        """
+        Loads the decision tree model from a file.
+
+        Parameters
+        ----------
+        path : str
+            File path to load the model from.
+        """
+        with open(path, 'rb') as f:
+            model_data = pickle.load(f)
+        self.root = model_data['root']
+        self.min_samples = model_data['min_samples']
+        self.max_depth = model_data['max_depth']
+        print(f"✅ Model loaded from {path}")
