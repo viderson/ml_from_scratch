@@ -11,6 +11,7 @@ setup(
         "pandas",
         "scikit-learn",
         "plotly"
+        "matplotlib"
     ],
     python_requires=">=3.8",
 )
