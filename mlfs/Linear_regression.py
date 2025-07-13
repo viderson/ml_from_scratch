@@ -67,7 +67,7 @@ class LinearRegression:
         db = np.sum(error) / n
         return dw, db
 
-    def fit(self, X, y, iterations=1000, plot_cost=True, verbose=True):
+    def fit(self, X, y, iterations=1000, plot_cost=False, verbose=True):
         """
         Fit the linear regression model to the training data.
 
