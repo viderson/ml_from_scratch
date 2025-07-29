@@ -118,7 +118,7 @@ class LogisticRegression:
             self.W -= self.learning_rate * self.gradient_w
             self.b -= self.learning_rate * self.gradient_b
 
-            if i % 10000 == 0:
+            if i % 10000 == 0 and plot_cost == True:
                 print(f"Cost after iteration {i}: {cost}")
 
         if plot_cost:
