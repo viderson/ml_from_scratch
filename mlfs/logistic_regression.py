@@ -143,20 +143,20 @@ class LogisticRegression:
         return (self.forward(X) >= 0.5).astype(int)
 
     def save_model(self, path):
-            """
-            Saves the model parameters to a file.
+        """
+        Saves the model parameters to a file.
 
-            Parameters:
-                path (str): File path to save the model.
-            """
-            model_data = {
-                'W': self.W,
-                'b': self.b,
-                'learning_rate': self.learning_rate
-            }
-            with open(path, 'wb') as f:
-                pickle.dump(model_data, f)
-            print(f"✅ Model saved to {path}")
+        Parameters:
+            path (str): File path to save the model.
+        """
+        model_data = {
+            'W': self.W,
+            'b': self.b,
+            'learning_rate': self.learning_rate
+        }
+        with open(path, 'wb') as f:
+            pickle.dump(model_data, f)
+        print(f"✅ Model saved to {path}")
 
     def load_model(self, path):
         """

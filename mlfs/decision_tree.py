@@ -283,3 +283,20 @@ class DecisionTree:
         self.min_samples = model_data['min_samples']
         self.max_depth = model_data['max_depth']
         print(f"✅ Model loaded from {path}")
+
+def compute_tree_depth(node):
+    if node is None or node.value is not None:
+        return 0
+    return 1 + max(compute_tree_depth(node.left), compute_tree_depth(node.right))
+
+def count_leaves(node):
+    if node is None:
+        return 0
+    if node.value is not None:
+        return 1
+    return count_leaves(node.left) + count_leaves(node.right)
+
+def count_nodes(node):
+    if node is None:
+        return 0
+    return 1 + count_nodes(node.left) + count_nodes(node.right)
