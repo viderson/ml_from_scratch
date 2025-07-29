@@ -12,7 +12,8 @@ setup(
         "scikit-learn",
         "plotly",
         "matplotlib",
-        "memory_profiler"
+        "memory_profiler",
+        "seaborn"
     ],
     python_requires=">=3.8",
 )
