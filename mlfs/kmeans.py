@@ -6,7 +6,7 @@ class KMeans:
     def __init__(self, n_clusters, iterations=10):
         self.n_clusters = n_clusters
         self.iterations = iterations
-        self.inertia_ = None  # Total within-cluster sum of squares
+        self.inertia_ = None  
 
     def initialize_centroids(self, X):
         """
@@ -19,7 +19,7 @@ class KMeans:
         """
         if self.n_clusters > X.shape[0]:
             raise ValueError(f"Number of clusters ({self.n_clusters}) cannot be greater than number of samples ({X.shape[0]})")
-        np.random.seed(42)  # For reproducibility
+        np.random.seed(42)  
         indices = np.random.permutation(X.shape[0])
         selected = indices[:self.n_clusters]
         self.centroids = X[selected]
