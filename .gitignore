@@ -1,19 +1,19 @@
-# Ignore virtual env
+
 .venv/
 venv/
 
-# Byte-compiled / cache
+
 __pycache__/
 *.py[cod]
 
-# Setuptools
+
 *.egg-info/
 build/
 dist/
 
-# Jupyter Notebook checkpoints
+
 .ipynb_checkpoints/
 
-# System
+
 .DS_Store
 Thumbs.db
