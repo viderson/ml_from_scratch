@@ -1,6 +1,7 @@
 # mlfs
 
-A small Python library implementing core machine learning algorithms **from scratch**, accompanied by comparison notebooks against `scikit-learn`. Perfect for learning, teaching, or including in your CV as a self-built ML toolkit.
+Custom-built Python library showcasing key machine learning algorithms implemented from scratch using NumPy. Designed to demonstrate deep understanding of algorithmic foundations, data preprocessing, and model evaluation. Includes detailed performance comparisons with `scikit-learn` for each method.
+
 
 ---
 
